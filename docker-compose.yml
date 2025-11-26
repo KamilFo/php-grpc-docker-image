@@ -1,0 +1,7 @@
+name: php-grpc-docker-image
+
+services:
+  fpm:
+    build:
+      context: .
+      dockerfile: Dockerfile
