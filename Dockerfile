@@ -4,6 +4,7 @@ FROM php:8.4-fpm
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    ca-certificates \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
@@ -23,6 +24,11 @@ RUN pecl install grpc && docker-php-ext-enable grpc
 
 # Установка Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Установка российских корневых сертификатов для T-Bank API
+COPY certs/russian_trusted_root_ca_pem.crt /usr/local/share/ca-certificates/
+COPY certs/russian_trusted_sub_ca_pem.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates
 
 # Установка рабочей директории
 WORKDIR /var/www
